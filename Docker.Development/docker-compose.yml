@@ -1,0 +1,31 @@
+version: '3.4'
+
+services:
+  mychores.database:
+    image: "mcr.microsoft.com/mssql/server:2022-latest"
+    container_name: "mychores.database.dev"
+    user: root
+    environment:
+        SA_PASSWORD: "@Development1"
+        ACCEPT_EULA: "Y"
+    ports:
+    - 1433:1433
+    volumes:
+      - sql-data:/var/opt/mssql  # Volume for persisting SQL Server data
+
+  mychores.api:
+    image: ${DOCKER_REGISTRY-}mychoresapi
+    container_name: "mychores.api.dev"
+    build:
+      context: ..
+      dockerfile: MyChores.API/Dockerfile
+    environment:
+    - DOTNET_ENVIRONMENT=Development
+    - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "6020:80"
+    depends_on:
+    - mychores.database
+
+volumes:
+  sql-data:  # Named volume for SQL Server data persistence
