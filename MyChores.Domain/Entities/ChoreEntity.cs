@@ -12,6 +12,8 @@ namespace MyChores.Domain.Entities
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public string Description { get; set; }
+
+        //public bool Completed { get; set; }
         public string ChoreOwner { get; set; }
         public string ChoreTaker { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
