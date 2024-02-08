@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MyChores.Application.Features.Chores.Commands;
 
@@ -9,18 +10,32 @@ namespace MyChores.API.Controllers
     {
 
         private readonly ILogger<ChoreController> _logger;
-        private readonly IMedatior _mediator;
+        private readonly IMediator _mediator;
 
-        public ChoreController(ILogger<ChoreController> logger)
+        public ChoreController(ILogger<ChoreController> logger, IMediator mediator)
         {
             _logger = logger;
+            _mediator = mediator;
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateChoreCommand command)
         {
-            return await _mediator.Send(command);
+            var createdEntityId = await _mediator.Send(command);
+            return Ok(createdEntityId);
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, UpdateChoreCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest();
+
+            await _mediator.Send(command);
+
+            return NoContent();
+
         }
     }
 }

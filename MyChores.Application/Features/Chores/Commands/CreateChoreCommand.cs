@@ -1,4 +1,5 @@
-﻿using MyChores.Application.Interfaces;
+﻿using MediatR;
+using MyChores.Application.Interfaces;
 using MyChores.Domain.Entities;
 using MyChores.Domain.Enums;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MyChores.Application.Features.Chores.Commands
 {
-    public class CreateChoreCommand
+    public class CreateChoreCommand : IRequest<Guid>
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -21,15 +22,14 @@ namespace MyChores.Application.Features.Chores.Commands
         public Recourse Recourse { get; set; }
     }
 
-    public class CreateChoreCommandHandler //todo mediatr
+    public class CreateChoreCommandHandler : IRequestHandler<CreateChoreCommand, Guid>
     {
-        private readonly IChoreCommandRepository _repository;
-        public CreateChoreCommandHandler(IChoreCommandRepository repository) 
+        private readonly IMyChoresDbContext _context;
+        public CreateChoreCommandHandler(IMyChoresDbContext context) 
         {
-            _repository = repository;
+            _context = context;
         }
-
-        public async Task<Guid> Handle(CreateChoreCommand command)
+        public async Task<Guid> Handle(CreateChoreCommand command, CancellationToken cancellationToken)
         {
             var entity = new ChoreEntity
             {
@@ -43,7 +43,10 @@ namespace MyChores.Application.Features.Chores.Commands
                 Recourse = command.Recourse,
             };
 
-            return await _repository.CreateAsync(entity);
+            await _context.Chores.AddAsync(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return entity.Id;
 
         }
     }

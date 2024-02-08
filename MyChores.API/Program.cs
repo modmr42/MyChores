@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MyChores.Application.Interfaces;
 using MyChores.Domain.Entities;
 using MyChores.Infrastructure;
+using System.Reflection;
 using System.Text;
 
 namespace MyChores.API
@@ -17,7 +19,7 @@ namespace MyChores.API
 
             // Add services to the container.
             // Add db
-            builder.Services.AddDbContext<MyChoresDbContext>();
+            builder.Services.AddDbContext<IMyChoresDbContext, MyChoresDbContext>();
             //db auth
             builder.Services.AddIdentity<MyChoresUserEntity, IdentityRole>(options =>
             {
@@ -56,7 +58,14 @@ namespace MyChores.API
                 };
             });
 
-
+            //mediatr
+            builder.Services.AddMediatR(config => 
+            {
+                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    config.RegisterServicesFromAssembly(assembly);
+                }
+            });
 
             //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddControllers();
