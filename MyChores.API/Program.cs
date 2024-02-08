@@ -21,7 +21,7 @@ namespace MyChores.API
             // Add db
             builder.Services.AddDbContext<IMyChoresDbContext, MyChoresDbContext>();
             //db auth
-            builder.Services.AddIdentity<MyChoresUserEntity, IdentityRole>(options =>
+            builder.Services.AddIdentity<AppUserEntity, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.User.RequireUniqueEmail = true;

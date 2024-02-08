@@ -6,7 +6,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
 
-        //public bool Completed { get; set; }
+        public bool Completed { get; set; }
         public string ChoreOwner { get; set; }
         public string ChoreTaker { get; set; }
         public string DayOfWeek { get; set; }

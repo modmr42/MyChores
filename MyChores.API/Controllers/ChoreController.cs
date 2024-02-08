@@ -1,7 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MyChores.API.Mappers;
 using MyChores.Application.Features.Chores.Commands;
 using MyChores.Application.Features.Chores.Queries;
+using System.Security.Claims;
 
 namespace MyChores.API.Controllers
 {
@@ -22,7 +24,11 @@ namespace MyChores.API.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> Get(Guid id)
         {
-            var dto = await _mediator.Send(new GetChoreByIdQuery { Id = id });
+            var query = new GetChoreByIdForUserQuery { Id = id };
+
+            query.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var dto = await _mediator.Send(query);
 
             return Ok(dto);
         }
@@ -30,7 +36,11 @@ namespace MyChores.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var dto = await _mediator.Send(new GetChoresQuery());
+            var query = new GetChoresForUserQuery();
+
+            query.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var dto = await _mediator.Send(query);
 
             return Ok(dto);
         }
@@ -38,7 +48,10 @@ namespace MyChores.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateChoreCommand command)
         {
-            var createdEntityId = await _mediator.Send(command);
+            var comm = (CreateChoreForUserCommand)command;
+            comm.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var createdEntityId = await _mediator.Send(comm);
             return Ok(createdEntityId);
         }
 
@@ -48,7 +61,10 @@ namespace MyChores.API.Controllers
             if (id != command.Id)
                 return BadRequest();
 
-            await _mediator.Send(command);
+            var comm = (UpdateChoreForUserCommand)command;
+            comm.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _mediator.Send(comm);
 
             return NoContent();
 
@@ -57,7 +73,11 @@ namespace MyChores.API.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await _mediator.Send(new DeleteChoreCommand { Id = id });
+            var comm = new DeleteChoreForUserCommand { Id = id };
+
+            comm.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _mediator.Send(comm);
             return NoContent();
         }
     }

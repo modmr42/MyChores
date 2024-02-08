@@ -1,4 +1,5 @@
-﻿using MyChores.Domain.Enums;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MyChores.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +14,26 @@ namespace MyChores.Domain.Entities
         public string Name { get; set; }
         public string Description { get; set; }
 
-        //public bool Completed { get; set; }
+        public bool Completed { get; set; }
         public string ChoreOwner { get; set; }
         public string ChoreTaker { get; set; }
         public DayOfWeek DayOfWeek { get; set; }
         public Recourse Recourse { get; set; }
         public DateTime CreatedDate { get; set;}
         public DateTime LastModifiedDate { get; set;}
+
+        public string UserId { get; set; }
+        public AppUserEntity User { get; set; }
+
+
+        public static void OnModelCreating(EntityTypeBuilder<ChoreEntity> entity)
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.HasOne(x => x.User)
+                .WithMany(x => x.Chores)
+                .HasForeignKey(x => x.UserId);
+        }
 
     }
 }

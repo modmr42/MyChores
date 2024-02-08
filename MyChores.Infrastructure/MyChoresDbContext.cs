@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MyChores.Infrastructure
 {
-    public class MyChoresDbContext : IdentityDbContext<MyChoresUserEntity>, IMyChoresDbContext
+    public class MyChoresDbContext : IdentityDbContext<AppUserEntity>, IMyChoresDbContext
     {
         private IConfiguration Configuration { get; }
         public DbSet<ChoreEntity> Chores { get; set; }
