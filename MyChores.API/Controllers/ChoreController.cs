@@ -53,5 +53,12 @@ namespace MyChores.API.Controllers
             return NoContent();
 
         }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await _mediator.Send(new DeleteChoreCommand { Id = id });
+            return NoContent();
+        }
     }
 }
