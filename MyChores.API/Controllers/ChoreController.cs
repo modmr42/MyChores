@@ -1,6 +1,5 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MyChores.API.Mappers;
 using MyChores.Application.Features.Chores.Commands;
 using MyChores.Application.Features.Chores.Queries;
 using System.Security.Claims;

@@ -1,9 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MyChores.API.Mappers;
-using MyChores.Application.Features.Chores.Commands;
-using MyChores.Application.Features.Chores.Queries;
-using System.Security.Claims;
+using MyChores.Application.Features.Auth.Commands;
+using MyChores.Application.Features.Auth.Queries;
 
 namespace MyChores.API.Controllers
 {
@@ -21,64 +19,51 @@ namespace MyChores.API.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> Get(Guid id)
-        {
-            var query = new GetChoreByIdForUserQuery { Id = id };
-
-            query.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var dto = await _mediator.Send(query);
-
-            return Ok(dto);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var query = new GetChoresForUserQuery();
-
-            query.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var dto = await _mediator.Send(query);
-
-            return Ok(dto);
-        }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateChoreCommand command)
+        public async Task<IActionResult> Create(CreateUserCommand command)
         {
-            var comm = (CreateChoreForUserCommand)command;
-            comm.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var createdEntityId = await _mediator.Send(command);
 
-            var createdEntityId = await _mediator.Send(comm);
             return Ok(createdEntityId);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, UpdateChoreCommand command)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginUserQuery query)
         {
-            if (id != command.Id)
-                return BadRequest();
+            var response = await _mediator.Send(query);
 
-            var comm = (UpdateChoreForUserCommand)command;
-            comm.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if(response == null)
+                return Unauthorized();
 
-            await _mediator.Send(comm);
-
-            return NoContent();
-
+            return Ok(response);
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var comm = new DeleteChoreForUserCommand { Id = id };
 
-            comm.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //[HttpPut("{id:guid}")]
+        //public async Task<IActionResult> Update(Guid id, UpdateChoreCommand command)
+        //{
+        //    if (id != command.Id)
+        //        return BadRequest();
 
-            await _mediator.Send(comm);
-            return NoContent();
-        }
+        //    var comm = (UpdateChoreForUserCommand)command;
+        //    comm.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //    await _mediator.Send(comm);
+
+        //    return NoContent();
+
+        //}
+
+        //[HttpDelete("{id:guid}")]
+        //public async Task<IActionResult> Delete(Guid id)
+        //{
+        //    var comm = new DeleteChoreForUserCommand { Id = id };
+
+        //    comm.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        //    await _mediator.Send(comm);
+        //    return NoContent();
+        //}
     }
 }
