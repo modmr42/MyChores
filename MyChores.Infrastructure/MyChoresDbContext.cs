@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using MyChores.Application.Interfaces;
 using MyChores.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MyChores.Infrastructure
 {
-    public class MyChoresDbContext : IdentityDbContext<MyChoresUserEntity>
+    public class MyChoresDbContext : IdentityDbContext<AppUserEntity>, IMyChoresDbContext
     {
         private IConfiguration Configuration { get; }
         public DbSet<ChoreEntity> Chores { get; set; }

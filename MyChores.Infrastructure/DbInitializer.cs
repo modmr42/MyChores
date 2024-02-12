@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using MyChores.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,22 @@ namespace MyChores.Infrastructure
 
             context.SaveChanges();
             return;
+        }
+
+        public static async Task AddTestUser(UserManager<AppUserEntity> userManager)
+        {
+            var user = new AppUserEntity
+            {
+                Email = "tester@tester.nl",
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = "tester"
+            };
+
+            try
+            {
+                await userManager.CreateAsync(user, "tester");
+            }
+            catch (Exception ex) { }
         }
     }
 }
