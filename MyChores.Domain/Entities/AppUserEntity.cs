@@ -15,4 +15,10 @@ namespace MyChores.Domain.Entities
 
         public ICollection<ChoreEntity> Chores { get; set; }
     }
+
+    public static class AppUserRoles
+    {
+        public const string Admin = "Admin";
+        public const string User = "User";
+    }
 }

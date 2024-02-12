@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyChores.API.Mappers;
 using MyChores.Application.Features.Chores.Commands;
@@ -9,6 +10,7 @@ namespace MyChores.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class ChoreController : ControllerBase
     {
 
@@ -48,8 +50,8 @@ namespace MyChores.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateChoreCommand command)
         {
-            var comm = (CreateChoreForUserCommand)command;
-            comm.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var comm = ChoreMapper.Map(command, userId);
 
             var createdEntityId = await _mediator.Send(comm);
             return Ok(createdEntityId);
@@ -61,8 +63,8 @@ namespace MyChores.API.Controllers
             if (id != command.Id)
                 return BadRequest();
 
-            var comm = (UpdateChoreForUserCommand)command;
-            comm.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var comm = ChoreMapper.Map(command,userId);
 
             await _mediator.Send(comm);
 
