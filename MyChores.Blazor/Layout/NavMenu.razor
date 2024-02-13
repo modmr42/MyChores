@@ -1,11 +1,12 @@
-﻿<div class="navmenu">
+﻿<div class="navmenu" Style="background-color:var(--neutral-fill-stealth-rest);">
     <input type="checkbox" title="Menu expand/collapse toggle" id="navmenu-toggle" class="navmenu-icon" />
     <label for="navmenu-toggle" class="navmenu-icon"><FluentIcon Value="@(new Icons.Regular.Size20.Navigation())" Color="Color.Fill" /></label>
     <nav class="sitenav" aria-labelledby="main-menu" onclick="document.getElementById('navmenu-toggle').click();">
-        <FluentNavMenu Id="main-menu" Width="250" Collapsible="true" Title="Navigation menu" @bind-Expanded="expanded">
+        <FluentNavMenu Id="main-menu" Width="250" Collapsible="true" Title="Navigation menu" @bind-Expanded="expanded" >
              <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent">Home</FluentNavLink>
-             <FluentNavLink Href="counter" Icon="@(new Icons.Regular.Size20.NumberSymbolSquare())" IconColor="Color.Accent">Counter</FluentNavLink>
-             <FluentNavLink Href="weather" Icon="@(new Icons.Regular.Size20.WeatherPartlyCloudyDay())" IconColor="Color.Accent">Weather</FluentNavLink>
+            <FluentNavLink Href="chores" Icon="@(new Icons.Regular.Size20.Person())" IconColor="Color.Accent">Account</FluentNavLink>
+            <FluentNavLink Href="chores" Icon="@(new Icons.Regular.Size20.Check())" IconColor="Color.Accent">Chores</FluentNavLink>
+
         </FluentNavMenu>
     </nav>
 </div>
