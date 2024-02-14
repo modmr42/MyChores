@@ -13,7 +13,7 @@ namespace MyChores.API.Mappers
                 Completed = command.Completed,
                 ChoreOwner = command.ChoreOwner,
                 ChoreTaker = command.ChoreTaker,
-                DayOfWeek = command.DayOfWeek,
+                DateTime = command.DateTime,
                 Recourse = command.Recourse,
                 UserId = userId,
             };
@@ -28,7 +28,7 @@ namespace MyChores.API.Mappers
                 Completed = command.Completed,
                 ChoreOwner = command.ChoreOwner,
                 ChoreTaker = command.ChoreTaker,
-                DayOfWeek = command.DayOfWeek,
+                DateTime = command.DateTime,
                 Recourse = command.Recourse,
                 UserId = userId,
             };

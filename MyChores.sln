@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyChores.Infrastructure", "
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "Docker.Development", "Docker.Development\Docker.Development.dcproj", "{D72AE06B-2E6C-45DB-8951-0F80F2FD28DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyChores.Blazor", "MyChores.Blazor\MyChores.Blazor.csproj", "{0525DB83-B7E4-4BD4-B355-7A97EF900C78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyChores.Blazor", "MyChores.Blazor\MyChores.Blazor.csproj", "{0525DB83-B7E4-4BD4-B355-7A97EF900C78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

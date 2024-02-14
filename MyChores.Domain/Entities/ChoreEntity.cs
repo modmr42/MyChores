@@ -17,7 +17,7 @@ namespace MyChores.Domain.Entities
         public bool Completed { get; set; }
         public string ChoreOwner { get; set; }
         public string ChoreTaker { get; set; }
-        public DayOfWeek DayOfWeek { get; set; }
+        public DateTime DateTime { get; set; }
         public Recourse Recourse { get; set; }
         public DateTime CreatedDate { get; set;}
         public DateTime LastModifiedDate { get; set;}

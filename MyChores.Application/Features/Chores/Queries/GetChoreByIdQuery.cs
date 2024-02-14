@@ -40,7 +40,7 @@ namespace MyChores.Application.Features.Chores.Queries
                 ChoreOwner = chore.ChoreOwner,
                 ChoreTaker = chore.ChoreTaker,
                 Completed = chore.Completed,
-                DayOfWeek = chore.DayOfWeek.ToString(),
+                DateTime = chore.DateTime,
                 Recourse = chore.Recourse.ToString(),
                 CreatedDate = chore.CreatedDate.ToString(culture), // move the format to constants
                 LastModifiedDate = chore.LastModifiedDate.ToString(culture)

@@ -17,7 +17,7 @@ namespace MyChores.Application.Features.Chores.Commands
         public bool Completed { get; set; }
         public string ChoreOwner { get; set; }
         public string ChoreTaker { get; set; }
-        public DayOfWeek DayOfWeek { get; set; }
+        public DateTime DateTime { get; set; }
         public Recourse Recourse { get; set; }
     }
 
@@ -44,7 +44,7 @@ namespace MyChores.Application.Features.Chores.Commands
                 Completed = command.Completed,
                 CreatedDate = DateTime.Now,
                 LastModifiedDate = DateTime.Now,
-                DayOfWeek = command.DayOfWeek,
+                DateTime = command.DateTime,
                 Recourse = command.Recourse,
                 UserId = command.UserId,
             };

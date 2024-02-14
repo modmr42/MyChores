@@ -1,0 +1,122 @@
+﻿[
+  {
+    "id": "c4159325-03cc-4d97-bfa9-d3368f88ae3c",
+    "name": "Four-striped grass mouse",
+    "description": "Corrosion of first deg mult sites of right wrist and hand",
+    "completed": true,
+    "choreOwner": "Ronnie",
+    "choreTaker": "Hersch",
+    "dateTime": "2024-02-18T14:05:36Z",
+    "recourse": "EveryDay",
+    "createdDate": "1/13/2024",
+    "lastModifiedDate": "3/31/2023"
+  },
+  {
+    "id": "262562f5-9464-4922-8c75-bda6e5f605eb",
+    "name": "South American puma",
+    "description": "Fall from non-moving wheelchair, subsequent encounter",
+    "completed": true,
+    "choreOwner": "Burgess",
+    "choreTaker": "Oralie",
+    "dateTime": "2024-02-18T03:27:48Z",
+    "recourse": "EveryWeek",
+    "createdDate": "8/16/2023",
+    "lastModifiedDate": "3/19/2023"
+  },
+  {
+    "id": "f356cc89-1e0d-4063-88b5-38c26441bafd",
+    "name": "Racer, american",
+    "description": "Blister (nonthermal) of left elbow, subsequent encounter",
+    "completed": false,
+    "choreOwner": "Ode",
+    "choreTaker": "Nat",
+    "dateTime": "2024-02-19T19:19:51Z",
+    "recourse": "EveryTwoWeeks",
+    "createdDate": "2/23/2023",
+    "lastModifiedDate": "3/16/2023"
+  },
+  {
+    "id": "7433ede4-280a-4b06-955c-bb1dd894d3b1",
+    "name": "Oystercatcher, blackish",
+    "description": "Underdosing of centr-acting/adren-neurn-block agnt, init",
+    "completed": false,
+    "choreOwner": "Winnie",
+    "choreTaker": "Bradney",
+    "dateTime": "2024-02-21T12:29:29Z",
+    "recourse": "EveryMonth",
+    "createdDate": "8/4/2023",
+    "lastModifiedDate": "11/26/2023"
+  },
+  {
+    "id": "8dfffe99-ab10-46cc-8a6b-ad1c166b296e",
+    "name": "Eagle, bateleur",
+    "description": "Atrophic flaccid tympanic membrane, right ear",
+    "completed": true,
+    "choreOwner": "Brnaby",
+    "choreTaker": "Valentia",
+    "dateTime": "2024-02-20T16:48:17Z",
+    "recourse": "EveryYear",
+    "createdDate": "9/1/2023",
+    "lastModifiedDate": "5/12/2023"
+  },
+  {
+    "id": "408ae184-fa72-48ca-88ef-4da3c9168416",
+    "name": "Osprey",
+    "description": "Abrasion, left lesser toe(s)",
+    "completed": false,
+    "choreOwner": "Devin",
+    "choreTaker": "Valentine",
+    "dateTime": "2024-02-22T00:19:20Z",
+    "recourse": "EveryDay",
+    "createdDate": "2/27/2023",
+    "lastModifiedDate": "12/12/2023"
+  },
+  {
+    "id": "faeb1399-efb4-4988-b236-8c01b1ac7dfd",
+    "name": "Dark-winged trumpeter",
+    "description": "Body mass index (BMI) 60.0-69.9, adult",
+    "completed": false,
+    "choreOwner": "Verne",
+    "choreTaker": "Cecilia",
+    "dateTime": "2024-02-15T13:22:58Z",
+    "recourse": "EveryDay",
+    "createdDate": "7/10/2023",
+    "lastModifiedDate": "9/6/2023"
+  },
+  {
+    "id": "bdedd5eb-c073-419d-8c6a-30f075fb2f5d",
+    "name": "Racer snake",
+    "description": "Stromal corneal pigmentations, right eye",
+    "completed": false,
+    "choreOwner": "Cristobal",
+    "choreTaker": "Arel",
+    "dateTime": "2024-02-15T16:22:58Z",
+    "recourse": "EveryDay",
+    "createdDate": "9/7/2023",
+    "lastModifiedDate": "12/21/2023"
+  },
+  {
+    "id": "22b8e453-2dcd-4fa5-ba21-e7700dcdfc3b",
+    "name": "Kangaroo, jungle",
+    "description": "Nondisp commnt fx shaft of r tibia, 7thK",
+    "completed": true,
+    "choreOwner": "Moe",
+    "choreTaker": "Brand",
+    "dateTime": "2024-02-15T13:12:58Z",
+    "recourse": "EveryDay",
+    "createdDate": "8/14/2023",
+    "lastModifiedDate": "4/6/2023"
+  },
+  {
+    "id": "32fc1328-ebb4-46f5-b414-3095572973c8",
+    "name": "Red and blue macaw",
+    "description": "Postcholecystectomy syndrome",
+    "completed": true,
+    "choreOwner": "Nickolai",
+    "choreTaker": "Ethelred",
+    "dateTime": "2024-02-15T18:12:58Z",
+    "recourse": "EveryDay",
+    "createdDate": "3/12/2023",
+    "lastModifiedDate": "2/12/2024"
+  }
+]

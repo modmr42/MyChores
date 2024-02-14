@@ -1,0 +1,159 @@
+﻿@page "/chores"
+@using MyChores.Application.Features.Chores.Dtos
+@using System.Diagnostics
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-8">
+            <FluentLabel Typo="Typography.H1"> My Chores </FluentLabel>
+            <FluentLabel Typo="Typography.H3"> @SelectedValue?.ToString("D") </FluentLabel>
+            <br />
+            <hr />
+            <div class="row justify-content-end mb-3">
+                <div class="col-1">
+                    <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" OnClick="@ShowNewChore"></FluentButton>
+                </div>
+            </div>
+            <br />
+            @if (showNewChore)
+            {
+            <div class="row mb-5">
+                <div class="col-11">
+                        <div class="rounded-top" style="background-color:var(--accent-fill-rest); height:10px;">
+                        </div>
+                        <FluentCard>
+                            <div class="row">
+
+                                <div class="col-2">
+                                    <FluentTimePicker  Label="Time:" />
+                                </div>
+                                <div class="col-9">
+                                    <FluentTextField  @bind-Value=newChore.Name Label="Name"></FluentTextField>
+                                    <FluentTextArea Class="w-100" @bind-Value=newChore.Description Label="Description"></FluentTextArea>
+
+                                    </div>
+                                    <div class="col-1 align-self-center">
+                                        <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
+                                    </div>
+                                </div>
+                            </FluentCard>
+                    </div>
+
+                    <div class="col-1 align-self-center">
+                        <FluentButton OnClick="(()=> showNewChore = false)">
+                            <FluentIcon Value="@(new Icons.Regular.Size16.Delete())" Color="Color.Error" />
+                        </FluentButton>
+                    </div>
+                </div>
+            }
+
+            @if(chores == null)
+            {
+                <div>Loading..</div>
+            }
+            else
+            {
+                @foreach (var chore in choresForSelectedDate!)
+                {
+                    <div class="row mb-5">
+                        <div class="col-11">
+                            <a href="@($"chores/{chore.Id}")" style="text-decoration:none">
+                                <div class="rounded-top" style="background-color:var(--accent-fill-rest); height:10px;">
+                                </div>
+                                <FluentCard>
+                                    <div class="row">
+
+                                        <div class="col-1 align-self-center text-center">
+                                            <FluentIcon Value="@(new Icons.Regular.Size20.Clock())" Color="Color.Accent" />
+
+                                            <FluentLabel Typo="Typography.H6">
+                                                @chore.DateTime.ToShortTimeString()
+                                            </FluentLabel>
+                                        </div>
+                                        <div class="col-10">
+                                            <FluentLabel Typo="Typography.Header"> @chore.Name </FluentLabel>
+                                                <FluentLabel Typo="Typography.Subject"> @chore.Description </FluentLabel>
+                                            </div>
+                                            <div class="col-1 align-self-center">
+                                                <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
+                                            </div>
+                                        </div>
+                                    </FluentCard>
+                                </a>
+                            </div>
+
+                            <div class="col-1 align-self-center">
+                                <FluentButton>
+                                    <FluentIcon Value="@(new Icons.Regular.Size16.Delete())" Color="Color.Error" />
+                                </FluentButton>
+                            </div>
+                        </div>
+                }
+
+            }
+
+            <br />
+        </div>
+
+
+        <div class="col-4">
+            <FluentCalendar DisabledDateFunc="@DisabledDate" ValueChanged="HandleCalendarValue"
+                            Style="width:100%!important; padding:10%; font-size:larger">
+                <DaysTemplate>
+                    @if (!context.IsInactive &&
+                    (context.Date.Day == 5 || context.Date.Day == 15))
+                    {
+                        <div style="color: red; font-weight: bold;">
+                            @context.DayNumber
+                        </div>
+                    }
+                    else
+                    {
+                        @context.DayNumber
+                    }
+                </DaysTemplate>
+            </FluentCalendar>
+        </div>
+    </div>
+</div>
+
+
+@code
+{
+    private DateTime? SelectedValue = DateTime.Now;
+    private IQueryable<ChoreDto>? chores;
+    private IQueryable<ChoreDto>? choresForSelectedDate;
+
+    private ChoreDto newChore = new ChoreDto();
+    private bool showNewChore;
+
+    protected override async Task OnInitializedAsync()
+    {
+        chores = (await Http.GetFromJsonAsync<List<ChoreDto>>("sample-data/chores.json"))!.AsQueryable();
+        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(SelectedValue.ToDateTime().Day)).OrderBy(x => x.DateTime);
+    }
+
+    private void HandleCalendarValue(DateTime? selectedValue)
+    {
+        SelectedValue = selectedValue;
+        newChore.DateTime = selectedValue.Value;
+    }
+    private void ShowNewChore()
+    {
+        showNewChore = true;
+    }
+
+    private bool DisabledDate(DateTime date)
+    {
+    return (date.Day == 3 ||
+            date.Day == 8 ||
+            date.Day == 20);
+    }
+
+
+}

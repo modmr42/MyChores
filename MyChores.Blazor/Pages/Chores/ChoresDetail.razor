@@ -1,0 +1,78 @@
+﻿@page "/chores/{Guid}"
+@using MyChores.Application.Features.Chores.Dtos
+@using System.Diagnostics
+
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <FluentLabel Typo="Typography.H1"> My Chores </FluentLabel>
+            <FluentLabel Typo="Typography.H3"> 15:00 </FluentLabel>
+                <br />
+                <hr />
+                <br />
+                <div class="col-11">
+                    <div class="rounded-top" style="background-color:var(--accent-fill-rest); height:10px;"></div>
+                    <FluentCard>
+                        <div class="row">
+
+                            <div class="col-1 align-self-center text-center">
+                                @* <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox> *@
+                                <FluentIcon Value="@(new Icons.Regular.Size20.Clock())" Color="Color.Accent" />
+
+                                <FluentLabel Typo="Typography.H6">
+                                    15:00
+                                </FluentLabel>
+                            </div>
+                            <div class="col-10">
+                                <FluentLabel Typo="Typography.Header"> @chore.Name </FluentLabel>
+                                <FluentLabel Typo="Typography.Subject"> @chore.Description </FluentLabel>
+                                <FluentLabel Typo="Typography.Subject"> @chore.ChoreOwner </FluentLabel>
+                                <FluentLabel Typo="Typography.Subject"> @chore.ChoreTaker </FluentLabel>
+                                <FluentLabel Typo="Typography.Subject"> @chore.LastModifiedDate </FluentLabel>
+                                </div>
+                                <div class="col-1 align-self-center">
+                                    <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
+                                </div>
+                        </div>
+                    </FluentCard>
+                </div>
+            </div>
+            <br />
+
+
+            <div class="col-4">
+                <FluentCalendar 
+                                Style="width:100%!important; padding:10%; font-size:larger">
+                    <DaysTemplate>
+                        @if (!context.IsInactive &&
+                        (context.Date.Day == 5 || context.Date.Day == 15))
+                        {
+                            <div style="color: red; font-weight: bold;">
+                                @context.DayNumber
+                            </div>
+                        }
+                        else
+                        {
+                            @context.DayNumber
+                        }
+                    </DaysTemplate>
+                </FluentCalendar>
+            </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Guid { get; set; }
+
+    private ChoreDto chore = new ChoreDto
+        {
+            Name = "Clean room",
+            Description = "Clean carpets, rugs, and hard floors to remove dust, dirt, and other particles.",
+            ChoreOwner = "Me",
+            ChoreTaker = "Me",
+            Completed = false,
+            CreatedDate = DateTime.Now.AddDays(-3).ToString("t"),
+            LastModifiedDate = DateTime.Now.AddDays(-2).ToString()
+        };
+}

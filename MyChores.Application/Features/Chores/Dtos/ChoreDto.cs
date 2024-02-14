@@ -9,7 +9,7 @@
         public bool Completed { get; set; }
         public string ChoreOwner { get; set; }
         public string ChoreTaker { get; set; }
-        public string DayOfWeek { get; set; }
+        public DateTime DateTime { get; set; }
         public string Recourse { get; set; }
         public string CreatedDate { get; set; }
         public string LastModifiedDate { get; set; }

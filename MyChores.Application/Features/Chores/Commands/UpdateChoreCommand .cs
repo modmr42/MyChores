@@ -18,7 +18,7 @@ namespace MyChores.Application.Features.Chores.Commands
         public bool Completed { get; set; }
         public string ChoreOwner { get; set; }
         public string ChoreTaker { get; set; }
-        public DayOfWeek DayOfWeek { get; set; }
+        public DateTime DateTime { get; set; }
         public Recourse Recourse { get; set; }
 
     }
@@ -51,7 +51,7 @@ namespace MyChores.Application.Features.Chores.Commands
             entity.ChoreTaker = command.ChoreTaker;
             entity.Completed = command.Completed;
             entity.LastModifiedDate = DateTime.Now;
-            entity.DayOfWeek = command.DayOfWeek;
+            entity.DateTime = command.DateTime;
             entity.Recourse = command.Recourse;
 
             await _context.SaveChangesAsync(cancellationToken);
