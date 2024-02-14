@@ -25,20 +25,26 @@
                         <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
                     </div> *@
                     <div class="col-11">
-                        <div class="rounded-top" style="background-color:var(--accent-fill-rest)">
-                            <FluentLabel Class="p-2 text-white"  Typo="Typography.H6">
-                                <FluentIcon Value="@(new Icons.Regular.Size20.Clock())" Color="Color.Lightweight" />
-                                15:00
-                            </FluentLabel>
+                        <div class="rounded-top" style="background-color:var(--accent-fill-rest); height:10px;">
+
                         </div>
                         <FluentCard>
                             <div class="row">
+
+                                <div class="col-1 align-self-center text-center">
+                                    @* <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox> *@
+                                <FluentIcon Value="@(new Icons.Regular.Size20.Clock())" Color="Color.Accent" />
+
+                                <FluentLabel  Typo="Typography.H6">
+                                    15:00
+                                </FluentLabel>
+                                </div>
+                                <div class="col-10">
+                                        <FluentLabel Typo="Typography.Header"> @chore.Name </FluentLabel>
+                                        <FluentLabel Typo="Typography.Subject"> @chore.Description </FluentLabel>
+                                </div>
                                     <div class="col-1 align-self-center">
                                         <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
-                                    </div>
-                                    <div class="col-11">
-                                            <FluentLabel Typo="Typography.Header"> @chore.Name </FluentLabel>
-                                            <FluentLabel Typo="Typography.Subject"> @chore.Description </FluentLabel>
                                     </div>
                             </div>
                         </FluentCard>
@@ -50,9 +56,6 @@
                         </FluentButton>
                     </div>
                 </div>
-                <br />
-
-
             }
             </div>
             <FluentDialogProvider />
