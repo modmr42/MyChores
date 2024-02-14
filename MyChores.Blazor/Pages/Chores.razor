@@ -3,19 +3,20 @@
 @inject IDialogService DialogService
 
 <style>
-    .container {
+/*     .container {
         display: flex;
-        height: 100vh; /* Set height to full viewport height */
-        width: 40vw;
+        height: 100vh; 
+        width: 45vw;
         flex-direction: column;
-        overflow: hidden; /* Added to prevent content overflow */
-    }
+        overflow: hidden; 
+    } */
 
-    .scrollable {
-        overflow-y: auto; /* Enable vertical scrolling */
+/*     .scrollable {
+        overflow-y: auto; 
+        overflow-x:hidden;
         flex-grow: 1;
         width: 100%;
-        margin: 0; /* Set margin to 0 to close the gap */
+        margin: 0; 
     }
 
     .fixed {
@@ -25,77 +26,74 @@
         top: 0;
         width: 30vw;
         background-color: lightgray;
-        overflow-y: auto; /* Add this line to enable scrolling within the fixed section */
-    }
+        overflow-y: auto; 
+    } */
 </style>
 
+
 <div class="container">
-    <div class="scrollable">
-        <FluentLabel Typo="Typography.H1"> My Chores </FluentLabel>
-        <FluentLabel Typo="Typography.H3"> @SelectedValue?.ToString("D") </FluentLabel>
 
-        <br />
-        <hr />
-        <FluentGrid Spacing="1"  Justify="JustifyContent.FlexEnd">
-                <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" Style="margin-right:10px" OnClick="@ShowMessageBoxAsync">
-                    Add
-                </FluentButton>
-        </FluentGrid>
-            <FluentDialogProvider />
-        <br />
+    <div class="row">
+        <div class="col-8">
+            <FluentLabel Typo="Typography.H1"> My Chores </FluentLabel>
+            <FluentLabel Typo="Typography.H3"> @SelectedValue?.ToString("D") </FluentLabel>
+            <br />
+            <hr />
+            <div class="row justify-content-end mb-3">
+                <div class="col-1">
+                    <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" OnClick="@ShowMessageBoxAsync"></FluentButton>
+                </div>
+            </div>
+            <br />
 
-        @foreach (var item in Enumerable.Range(1, 3))
-        {
-        <FluentStack Orientation="Orientation.Horizontal"
-                        HorizontalAlignment="HorizontalAlignment.Start"
-                        VerticalAlignment="VerticalAlignment.Top"
-                        VerticalGap="20">
-            <FluentStack Orientation="Orientation.Vertical"
-                            HorizontalAlignment="HorizontalAlignment.Start"
-                            VerticalAlignment="VerticalAlignment.Top"
-                            Width="5%" >
-                <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
-
-            </FluentStack>
-
-            <FluentStack Orientation="Orientation.Vertical"
-                            HorizontalAlignment="HorizontalAlignment.Start"
-                            VerticalAlignment="VerticalAlignment.Top"
-                            >
-
-                <FluentCard Width="100%" Height="auto">
-                    <FluentLabel Typo="Typography.Header"> @chore.Name </FluentLabel>
-                        <FluentLabel Typo="Typography.Subject"> @chore.Description </FluentLabel>
-                    </FluentCard>
-                <br />
-            </FluentStack>
-                    <FluentButton>
-                        <FluentIcon Value="@(new Icons.Regular.Size16.Delete())" Color="Color.Error" />
-                    </FluentButton>
-        </FluentStack>
-        }
-
-
-    </div>
-    <div class="fixed">
-        <FluentCalendar DisabledDateFunc="@DisabledDate" @bind-Value="@SelectedValue"
-        Style="width:100%!important; padding:10%; font-size:larger">
-            <DaysTemplate>
-                @if (!context.IsInactive &&
-                (context.Date.Day == 5 || context.Date.Day == 15))
-                {
-                    <div style="color: red; font-weight: bold;">
-                        @context.DayNumber
+            @foreach (var item in Enumerable.Range(1,randomNumber))
+            {
+                <div class="row">
+                    <div class="col-1 align-self-center">
+                        <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
                     </div>
-                }
-                else
-                {
-                    @context.DayNumber
-                }
-            </DaysTemplate>
-        </FluentCalendar>
+                    <div class="col-10">
+                            <FluentCard>
+                                <FluentLabel Typo="Typography.Header"> @chore.Name </FluentLabel>
+                                    <FluentLabel Typo="Typography.Subject"> @chore.Description </FluentLabel>
+                            </FluentCard>
+                    </div>
+
+                        <div class="col-1 align-self-center">
+                        <FluentButton>
+                            <FluentIcon Value="@(new Icons.Regular.Size16.Delete())" Color="Color.Error" />
+                        </FluentButton>
+                    </div>
+                </div>
+                <br />
+
+            }
+            </div>
+            <FluentDialogProvider />
+            <br />
+
+
+        <div class="col-4">
+            <FluentCalendar DisabledDateFunc="@DisabledDate" @bind-Value="@SelectedValue"
+                            Style="width:100%!important; padding:10%; font-size:larger">
+                <DaysTemplate>
+                    @if (!context.IsInactive &&
+                    (context.Date.Day == 5 || context.Date.Day == 15))
+                    {
+                        <div style="color: red; font-weight: bold;">
+                            @context.DayNumber
+                        </div>
+                    }
+                    else
+                    {
+                        @context.DayNumber
+                    }
+                </DaysTemplate>
+            </FluentCalendar>
+        </div>
     </div>
 </div>
+
 
 
 @code
@@ -108,8 +106,14 @@
             ChoreTaker = "Me",
             Completed = false,
         };
-
-    private DateTime? SelectedValue = null;
+    private int randomNumber 
+    {
+        get
+        {
+            return new Random().Next(5);
+        } 
+    }
+    private DateTime? SelectedValue = DateTime.Now;
 
     private bool DisabledDate(DateTime date) 
     {
