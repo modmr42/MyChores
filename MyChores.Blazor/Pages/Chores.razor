@@ -2,34 +2,6 @@
 @using MyChores.Application.Features.Chores.Dtos
 @inject IDialogService DialogService
 
-<style>
-/*     .container {
-        display: flex;
-        height: 100vh; 
-        width: 45vw;
-        flex-direction: column;
-        overflow: hidden; 
-    } */
-
-/*     .scrollable {
-        overflow-y: auto; 
-        overflow-x:hidden;
-        flex-grow: 1;
-        width: 100%;
-        margin: 0; 
-    }
-
-    .fixed {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        top: 0;
-        width: 30vw;
-        background-color: lightgray;
-        overflow-y: auto; 
-    } */
-</style>
-
 
 <div class="container">
 
@@ -48,15 +20,28 @@
 
             @foreach (var item in Enumerable.Range(1,randomNumber))
             {
-                <div class="row">
-                    <div class="col-1 align-self-center">
+                <div class="row mb-5">
+@*                     <div class="col-1 align-self-center">
                         <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
-                    </div>
-                    <div class="col-10">
-                            <FluentCard>
-                                <FluentLabel Typo="Typography.Header"> @chore.Name </FluentLabel>
-                                    <FluentLabel Typo="Typography.Subject"> @chore.Description </FluentLabel>
-                            </FluentCard>
+                    </div> *@
+                    <div class="col-11">
+                        <div class="rounded-top" style="background-color:var(--accent-fill-rest)">
+                            <FluentLabel Class="p-2 text-white"  Typo="Typography.H6">
+                                <FluentIcon Value="@(new Icons.Regular.Size20.Clock())" Color="Color.Lightweight" />
+                                15:00
+                            </FluentLabel>
+                        </div>
+                        <FluentCard>
+                            <div class="row">
+                                    <div class="col-1 align-self-center">
+                                        <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
+                                    </div>
+                                    <div class="col-11">
+                                            <FluentLabel Typo="Typography.Header"> @chore.Name </FluentLabel>
+                                            <FluentLabel Typo="Typography.Subject"> @chore.Description </FluentLabel>
+                                    </div>
+                            </div>
+                        </FluentCard>
                     </div>
 
                         <div class="col-1 align-self-center">
@@ -66,6 +51,7 @@
                     </div>
                 </div>
                 <br />
+
 
             }
             </div>
@@ -105,39 +91,39 @@
             ChoreOwner = "Me",
             ChoreTaker = "Me",
             Completed = false,
-            CreatedDate = DateTime.Now.AddDays(-3);
-        };
-    private int randomNumber 
+            CreatedDate = DateTime.Now.AddDays(-3).ToString("t"),
+    };
+    private int randomNumber
     {
-        get
-        {
-            return new Random().Next(5);
-        } 
+    get
+    {
+        return new Random().Next(5);
+    }
     }
     private DateTime? SelectedValue = DateTime.Now;
 
-    private bool DisabledDate(DateTime date) 
+    private bool DisabledDate(DateTime date)
     {
-        return (date.Day == 3 ||
-                date.Day == 8 ||
-                date.Day == 20);
+    return (date.Day == 3 ||
+            date.Day == 8 ||
+            date.Day == 20);
     }
 
     private async Task ShowMessageBoxAsync()
     {
-        var dialog = await DialogService.ShowMessageBoxAsync(new DialogParameters<MessageBoxContent>()
+    var dialog = await DialogService.ShowMessageBoxAsync(new DialogParameters<MessageBoxContent>()
+        {
+            Content = new()
             {
-                Content = new()
-                {
-                    Title = "My title",
-                    MarkupMessage = new MarkupString("My <strong>customized</strong> message"),
-                    Icon = new Icons.Regular.Size24.Games(),
-                    IconColor = Color.Success,
-                },
-                PrimaryAction = "Plus",
-                SecondaryAction = "Minus",
-                Width = "300px",
-            });
-        var result = await dialog.Result;
+                Title = "My title",
+                MarkupMessage = new MarkupString("My <strong>customized</strong> message"),
+                Icon = new Icons.Regular.Size24.Games(),
+                IconColor = Color.Success,
+            },
+            PrimaryAction = "Plus",
+            SecondaryAction = "Minus",
+            Width = "300px",
+        });
+    var result = await dialog.Result;
     }
 }
