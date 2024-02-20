@@ -1,4 +1,8 @@
 ﻿@page "/chores/{Guid}"
+@attribute [Authorize]
+
+
+@using Microsoft.AspNetCore.Authorization
 @using MyChores.Application.Features.Chores.Dtos
 @using System.Diagnostics
 

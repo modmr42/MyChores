@@ -1,10 +1,16 @@
 ﻿@page "/chores"
+@attribute [Authorize]
+
+
+@using Microsoft.AspNetCore.Authorization
 @using MyChores.Application.Features.Chores.Dtos
 @using System.Diagnostics
 @using MyChores.Domain.Enums
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
+
+
 
 
 <div class="container">

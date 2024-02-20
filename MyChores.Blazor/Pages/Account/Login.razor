@@ -8,6 +8,7 @@
 
 
 @inject HttpClient Http
+@inject NavigationManager navigation
 @inject AuthenticationStateProvider AuthStateProvider
 @inject ILocalStorageService LocalStorage
 @inject IConfiguration Configuration
@@ -42,5 +43,11 @@
 
         await LocalStorage.SetItemAsync("token", token);
         var user = await AuthStateProvider.GetAuthenticationStateAsync();
+
+        if (user.User.Identity.IsAuthenticated)
+        {
+            navigation.NavigateTo("/Chores");
+        }
+
     }
 }
