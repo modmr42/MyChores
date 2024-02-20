@@ -10,8 +10,8 @@ services:
         ACCEPT_EULA: "Y"
     ports:
     - 1433:1433
-    volumes:
-      - sql-data:/var/opt/mssql  # Volume for persisting SQL Server data
+    # volumes:
+    #   - sql-data:/var/opt/mssql  # Volume for persisting SQL Server data
 
   mychores.api:
     image: ${DOCKER_REGISTRY-}mychoresapi
@@ -27,5 +27,5 @@ services:
     depends_on:
     - mychores.database
 
-volumes:
-  sql-data:  # Named volume for SQL Server data persistence
+# volumes:
+#   sql-data:  # Named volume for SQL Server data persistence

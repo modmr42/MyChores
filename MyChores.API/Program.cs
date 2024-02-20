@@ -120,6 +120,29 @@ namespace MyChores.API
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseCors(builder =>
+            {
+                if (app.Environment.IsDevelopment())
+                {
+                    builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                }
+                else
+                {
+                    builder
+                    .WithOrigins("http://localhost:6073",
+                    "http://onlinetheorie.nl",
+                    "https://onlinetheorie.nl",
+                    "http://onlinetheorie.nl:6060",
+                    "https://onlinetheorie.nl:6060")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+                }
+            });
+
 
             app.MapControllerRoute(
             name: "default",

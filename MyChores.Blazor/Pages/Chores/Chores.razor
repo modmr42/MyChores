@@ -3,12 +3,15 @@
 
 
 @using Microsoft.AspNetCore.Authorization
+@using MyChores.Application.Features.Chores.Commands
 @using MyChores.Application.Features.Chores.Dtos
 @using System.Diagnostics
+@using MyChores.Blazor.Services
 @using MyChores.Domain.Enums
-@inject IDialogService DialogService
+
+
 @inject NavigationManager NavigationManager
-@inject HttpClient Http
+@inject ChoreService ChoreService
 
 
 
@@ -19,25 +22,25 @@
         <div class="col-8">
             <FluentLabel Typo="Typography.H1"> My Chores </FluentLabel>
             <FluentLabel Typo="Typography.H3"> @SelectedValue?.ToString("D") </FluentLabel>
-            <br />
-            <hr />
-            <div class="row justify-content-end mb-3">
-                <div class="col-1">
-                    <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" OnClick="@ShowNewChore"></FluentButton>
+                <br />
+                <hr />
+                <div class="row justify-content-end mb-3">
+                    <div class="col-1">
+                        <FluentButton IconStart="@(new Icons.Regular.Size16.Add())" OnClick="@ShowNewChore"></FluentButton>
+                    </div>
                 </div>
-            </div>
-            <br />
-            @if (showNewChore)
+                <br />
+                @if (showNewChore)
             {
-            <div class="row mb-5">
-                <div class="col-11">
+                <div class="row mb-5">
+                    <div class="col-11">
                         <div class="rounded-top" style="background-color:var(--accent-fill-rest); height:10px;">
                         </div>
                         <FluentCard>
                             <div class="row">
 
                                 <div class="col-2">
-                                    <FluentTimePicker  Label="Time:" />
+                                    <FluentTimePicker Label="Time:" />
                                 </div>
                                 <div class="col-9">
                                     <div class="row">
@@ -45,34 +48,34 @@
                                             <FluentTextField Class="w-100" @bind-Value=newChore.Name Label="Name"></FluentTextField>
                                         </div>
                                         <div class="col-6">
-                                            <FluentSelect Class="w-100" Items="recourseOptions"
+@*                                             <FluentSelect Class="w-100" Items="recourseOptions"
                                                           Label="Select a recourse"
                                                           OptionValue="@(r => ((int)r.Value).ToString())"
                                                           OptionText="@(r => r.Value.ToString())"
-                                                          @bind-Value="newChore.Recourse" />
+                                                          @bind-Value="newChore.Recourse" /> *@
                                         </div>
                                     </div>
                                     <FluentTextArea Class="w-100" @bind-Value=newChore.Description Label="Description"></FluentTextArea>
-                                    </div>
-                                    <div class="col-1 align-self-center">
-                                        <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
-                                    </div>
                                 </div>
-                            </FluentCard>
+                                <div class="col-1 align-self-center">
+                                    <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
+                                </div>
+                            </div>
+                        </FluentCard>
                     </div>
 
                     <div class="col-1 align-self-center">
                         <FluentButton Class="mb-3" OnClick="(()=> showNewChore = false)">
                             <FluentIcon Value="@(new Icons.Regular.Size16.Delete())" Color="Color.Error" />
                         </FluentButton>
-                        <FluentButton  OnClick="(()=> showNewChore = false)">
+                        <FluentButton OnClick="(()=> showNewChore = false)">
                             <FluentIcon Value="@(new Icons.Regular.Size16.Checkmark())" Color="Color.Accent" />
                         </FluentButton>
                     </div>
                 </div>
             }
 
-            @if(chores == null)
+            @if (chores == null)
             {
                 <div>Loading..</div>
             }
@@ -146,35 +149,43 @@
 @code
 {
     private DateTime? SelectedValue = DateTime.Now;
-    private IQueryable<ChoreDto>? chores;
-    private IQueryable<ChoreDto>? choresForSelectedDate;
+    private List<ChoreDto>? chores;
+    private List<ChoreDto>? choresForSelectedDate;
 
-    private ChoreDto newChore = new ChoreDto();
+    private CreateChoreCommand newChore = new CreateChoreCommand();
     private bool showNewChore;
 
-    private List<Option<Recourse?>> recourseOptions = Enum.GetValues(typeof(Recourse)).Cast<Recourse?>().Select(x => new Option<Recourse?> { Value = x.Value }).ToList(); 
+    // private List<Option<Recourse?>> recourseOptions = Enum.GetValues(typeof(Recourse)).Cast<Recourse?>().Select(x => new Option<Recourse?> { Value = x.Value }).ToList();
 
     protected override async Task OnInitializedAsync()
     {
-        chores = (await Http.GetFromJsonAsync<List<ChoreDto>>("sample-data/chores.json"))!.AsQueryable();
-        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(SelectedValue.ToDateTime().Day)).OrderBy(x => x.DateTime);
+        chores = await ChoreService.GetAllAsync();
+        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(SelectedValue.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
     }
 
     private void HandleCalendarValue(DateTime? selectedValue)
     {
         SelectedValue = selectedValue;
         newChore.DateTime = selectedValue.Value;
+
+        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(SelectedValue.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
     }
     private void ShowNewChore()
     {
         showNewChore = true;
     }
 
+    private async Task CreateChore()
+    {
+        await ChoreService.CreateAsync(newChore);
+        chores = await ChoreService.GetAllAsync();
+    }
+
     private bool DisabledDate(DateTime date)
     {
-    return (date.Day == 3 ||
-            date.Day == 8 ||
-            date.Day == 20);
+        return (date.Day == 3 ||
+                date.Day == 8 ||
+                date.Day == 20);
     }
 
 
