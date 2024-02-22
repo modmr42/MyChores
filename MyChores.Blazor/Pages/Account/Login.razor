@@ -2,24 +2,25 @@
 @using Blazored.LocalStorage
 @using Microsoft.AspNetCore.Components.Authorization
 @using MyChores.Application.Features.Auth.Queries
+@using MyChores.Blazor.Services
 
 @page "/account/login"
 
 
 
-@inject HttpClient Http
 @inject NavigationManager navigation
-@inject AuthenticationStateProvider AuthStateProvider
+@inject AuthenticationStateProvider authStateProvider
+@inject AuthService authService
+
 @inject ILocalStorageService LocalStorage
-@inject IConfiguration Configuration
 
 <div class="container ">
     <div class="row justify-content-center">
         <div class="col-6">
             <h3>Login</h3>
             <EditForm Model="user" OnSubmit="HandleLogin">
-                <label for="username">Name</label>
-                <InputText id="username" @bind-Value="user.Email" />
+                <label for="email">Email</label>
+                <InputText id="email" @bind-Value="user.Email" />
                 <label for="password">Password</label>
                 <InputText id="password" @bind-Value="user.Password" type="password" />
                 <button type="submit" class="btn btn-primary">Do it!</button>
@@ -29,22 +30,28 @@
 </div>
 
 
-@code 
+@code
 {
-    LoginUserQuery user = new LoginUserQuery();
+    private LoginUserQuery? user;
 
-    async Task HandleLogin()
+    protected override async Task OnInitializedAsync()
     {
-        //var result = await Http.PostAsJsonAsync($"{Configuration["ApiUrl"]}api/auth", user);
-        //var token = await result.Content.ReadAsStringAsync();
+        user = new LoginUserQuery();
+    }
 
-        //Just hard coding the token for now :)
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQ3NDQxMWFhLTFlNTItNDIzZS1iODFkLWIxZmViMGE2NzdhNSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJzdHJpbmciLCJqdGkiOiIzYTFhZTI1Yi01NzlhLTRiYTItYjRjNi02NzIzZDRlZTVkNmYiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJVc2VyIiwiZXhwIjoxNzA4NDc0NzA4LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjUwMDAiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjQyMDAifQ.HSLm6v6Ixdv1i4DWBzqnkyY2eslOkf3CiMcXR8lD6nY";
+    public async Task HandleLogin()
+    {
 
-        await LocalStorage.SetItemAsync("token", token);
-        var user = await AuthStateProvider.GetAuthenticationStateAsync();
+        var response = await authService.LoginUserAsync(user);
 
-        if (user.User.Identity.IsAuthenticated)
+        if (response == null)
+            throw new Exception("login failed");
+
+        await LocalStorage.SetItemAsync("token", response.Token);
+
+        var userState = await authStateProvider.GetAuthenticationStateAsync();
+
+        if (userState.User.Identity.IsAuthenticated)
         {
             navigation.NavigateTo("/Chores");
         }
