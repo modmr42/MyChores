@@ -5,6 +5,12 @@
 @using Microsoft.AspNetCore.Authorization
 @using MyChores.Application.Features.Chores.Dtos
 @using System.Diagnostics
+@using MyChores.Blazor.Services
+
+
+
+@inject ChoreService ChoreService
+
 
 <div class="container">
     <div class="row">
@@ -68,14 +74,11 @@
 
     private bool editChore = false;
 
-    private ChoreDto chore = new ChoreDto
-        {
-            Name = "Clean room",
-            Description = "Clean carpets, rugs, and hard floors to remove dust, dirt, and other particles.",
-            ChoreOwner = "Me",
-            ChoreTaker = "Me",
-            Completed = false,
-            CreatedDate = DateTime.Now.AddDays(-3).ToString("t"),
-            LastModifiedDate = DateTime.Now.AddDays(-2).ToString()
-        };
+    private ChoreDto? chore = new ChoreDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        chore = await ChoreService.GetAsync(Guid);
+    }
+
 }

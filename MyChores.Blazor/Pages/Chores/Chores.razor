@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-8">
             <FluentLabel Typo="Typography.H1"> My Chores </FluentLabel>
-            <FluentLabel Typo="Typography.H3"> @SelectedValue?.ToString("D") </FluentLabel>
+            <FluentLabel Typo="Typography.H3"> @CurrentSelectedDate?.ToString("D") </FluentLabel>
                 <br />
                 <hr />
                 <div class="row justify-content-end mb-3">
@@ -32,47 +32,49 @@
                 <br />
                 @if (showNewChore)
             {
-                <div class="row mb-5">
-                    <div class="col-11">
-                        <div class="rounded-top" style="background-color:var(--accent-fill-rest); height:10px;">
-                        </div>
-                        <FluentCard>
-                            <div class="row">
-
-                                <div class="col-2">
-                                    <FluentTimePicker Label="Time:" />
-                                </div>
-                                <div class="col-9">
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <FluentTextField Class="w-100" @bind-Value=newChore.Name Label="Name"></FluentTextField>
-                                        </div>
-                                        <div class="col-6">
-@*                                             <FluentSelect Class="w-100" Items="recourseOptions"
-                                                          Label="Select a recourse"
-                                                          OptionValue="@(r => ((int)r.Value).ToString())"
-                                                          OptionText="@(r => r.Value.ToString())"
-                                                          @bind-Value="newChore.Recourse" /> *@
-                                        </div>
-                                    </div>
-                                    <FluentTextArea Class="w-100" @bind-Value=newChore.Description Label="Description"></FluentTextArea>
-                                </div>
-                                <div class="col-1 align-self-center">
-                                    <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
-                                </div>
+                <EditForm Model="newChore" OnSubmit="CreateChore">
+                    <div class="row mb-5">
+                        <div class="col-11">
+                            <div class="rounded-top" style="background-color:var(--accent-fill-rest); height:10px;">
                             </div>
-                        </FluentCard>
-                    </div>
+                            <FluentCard>
+                                <div class="row">
 
-                    <div class="col-1 align-self-center">
-                        <FluentButton Class="mb-3" OnClick="(()=> showNewChore = false)">
-                            <FluentIcon Value="@(new Icons.Regular.Size16.Delete())" Color="Color.Error" />
-                        </FluentButton>
-                        <FluentButton OnClick="(()=> showNewChore = false)">
-                            <FluentIcon Value="@(new Icons.Regular.Size16.Checkmark())" Color="Color.Accent" />
-                        </FluentButton>
+                                    <div class="col-2">
+                                        <FluentTimePicker @bind-Value="newChoreTime" Label="Time:" />
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <FluentTextField Class="w-100" @bind-Value=newChore.Name Label="Name"></FluentTextField>
+                                            </div>
+                                            <div class="col-6">
+                                            @*<FluentSelect Class="w-100" Items="recourseOptions"
+                                                              Label="Select a recourse"
+                                                              OptionValue="@(r => ((int)r.Value).ToString())"
+                                                              OptionText="@(r => r.Value.ToString())"
+                                                              @bind-Value="newChore.Recourse" /> *@
+                                            </div>
+                                        </div>
+                                        <FluentTextArea Class="w-100" @bind-Value=newChore.Description Label="Description"></FluentTextArea>
+                                    </div>
+                                    <div class="col-1 align-self-center">
+                                        <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
+                                    </div>
+                                </div>
+                            </FluentCard>
+                        </div>
+
+                        <div class="col-1 align-self-center">
+                            <FluentButton Class="mb-3" OnClick="(()=> showNewChore = false)">
+                                <FluentIcon Value="@(new Icons.Regular.Size16.Delete())" Color="Color.Error" />
+                            </FluentButton>
+                            <FluentButton Type="ButtonType.Submit">
+                                <FluentIcon Value="@(new Icons.Regular.Size16.Checkmark())" Color="Color.Accent" />
+                            </FluentButton>
+                        </div>
                     </div>
-                </div>
+                </EditForm>
             }
 
             @if (chores == null)
@@ -148,27 +150,27 @@
 
 @code
 {
-    private DateTime? SelectedValue = DateTime.Now;
+    private DateTime? CurrentSelectedDate = DateTime.Now;
     private List<ChoreDto>? chores;
     private List<ChoreDto>? choresForSelectedDate;
 
     private CreateChoreCommand newChore = new CreateChoreCommand();
     private bool showNewChore;
+    private DateTime? newChoreTime;
 
     // private List<Option<Recourse?>> recourseOptions = Enum.GetValues(typeof(Recourse)).Cast<Recourse?>().Select(x => new Option<Recourse?> { Value = x.Value }).ToList();
 
     protected override async Task OnInitializedAsync()
     {
         chores = await ChoreService.GetAllAsync();
-        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(SelectedValue.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
+        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(CurrentSelectedDate.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
     }
 
     private void HandleCalendarValue(DateTime? selectedValue)
     {
-        SelectedValue = selectedValue;
-        newChore.DateTime = selectedValue.Value;
+        CurrentSelectedDate = selectedValue;
 
-        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(SelectedValue.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
+        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(CurrentSelectedDate.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
     }
     private void ShowNewChore()
     {
@@ -177,8 +179,17 @@
 
     private async Task CreateChore()
     {
+        newChore.ChoreOwner = "Me";
+        newChore.ChoreTaker = "Me";
+        newChore.DateTime = CombineDateTime(CurrentSelectedDate.Value, newChoreTime.Value);
         await ChoreService.CreateAsync(newChore);
         chores = await ChoreService.GetAllAsync();
+        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(CurrentSelectedDate.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
+
+        newChore = new CreateChoreCommand();
+
+        showNewChore = false;
+
     }
 
     private bool DisabledDate(DateTime date)
@@ -186,6 +197,13 @@
         return (date.Day == 3 ||
                 date.Day == 8 ||
                 date.Day == 20);
+    }
+
+    static DateTime CombineDateTime(DateTime datePart, DateTime timePart)
+    {
+        // Combine the date part with the time part
+        return new DateTime(datePart.Year, datePart.Month, datePart.Day,
+                            timePart.Hour, timePart.Minute, timePart.Second);
     }
 
 
