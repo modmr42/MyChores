@@ -1,11 +1,4 @@
-﻿@using Blazored.LocalStorage
-@using Microsoft.AspNetCore.Components.Authorization
-@inject NavigationManager navigation
-@inject AuthenticationStateProvider AuthStateProvider
-@inject ILocalStorageService LocalStorage
-
-
-
+﻿
 <div class="navmenu" Style="background-color:var(--neutral-fill-stealth-rest);">
     <input type="checkbox" title="Menu expand/collapse toggle" id="navmenu-toggle" class="navmenu-icon" />
     <label for="navmenu-toggle" class="navmenu-icon"><FluentIcon Value="@(new Icons.Regular.Size20.Navigation())" Color="Color.Fill" /></label>
@@ -14,20 +7,11 @@
              <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent">Home</FluentNavLink>
             <FluentNavLink Href="chores" Icon="@(new Icons.Regular.Size20.Person())" IconColor="Color.Accent">Account</FluentNavLink>
             <FluentNavLink Href="chores" Icon="@(new Icons.Regular.Size20.Check())" IconColor="Color.Accent">Chores</FluentNavLink>
-            <FluentButton OnClick="LogOut" Color="Color.Accent">Logout</FluentButton>
         </FluentNavMenu>
     </nav>
 </div>
 @code {
     private bool expanded = true;
 
-    private async Task LogOut()
-    {
-        await LocalStorage.RemoveItemAsync("token");
-        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
-        if (!authState.User.Identity.IsAuthenticated)
-        {
-            navigation.NavigateTo("/");
-        }
-    }
+
 }

@@ -1,0 +1,34 @@
+﻿@namespace MyChores.Blazor.Layout
+
+
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager navigation
+@inject AuthenticationStateProvider AuthStateProvider
+@inject ILocalStorageService LocalStorage
+
+<FluentHeader>
+    <a class="text-decoration-none text-white ms-md-3" href="/">MyChores</a>
+
+    <FluentGrid Justify="JustifyContent.FlexEnd">
+        <FluentGridItem Class="me-5">
+            <AuthorizeView>
+                <div class="col-1 align-self-end">
+                    <FluentButton OnClick="LogOut" Appearance="Appearance.Lightweight">Logout</FluentButton>
+                </div>
+            </AuthorizeView>
+        </FluentGridItem>
+    </FluentGrid>
+</FluentHeader>
+
+@code {
+    private async Task LogOut()
+    {
+        await LocalStorage.RemoveItemAsync("token");
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            navigation.NavigateTo("/");
+        }
+    }
+}

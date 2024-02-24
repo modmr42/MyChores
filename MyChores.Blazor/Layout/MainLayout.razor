@@ -1,9 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
 @inherits LayoutComponentBase
 <FluentLayout>
-    <FluentHeader>
-        <a class="text-decoration-none text-white" href="/">MyChores</a>
-    </FluentHeader>
+    <NavHeader />
     <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
         <AuthorizeView>
             <NavMenu />
@@ -21,12 +19,12 @@
             </ErrorBoundary>
         </FluentBodyContent>
     </FluentStack>
-@*     <FluentFooter>
-        <div class="link1">
-            <a href="https://www.fluentui-blazor.net" target="_blank">Documentation and demos</a>
-        </div>
-        <div class="link2">
-            <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor" target="_blank">About Blazor</a>
-        </div>
+    @*     <FluentFooter>
+    <div class="link1">
+    <a href="https://www.fluentui-blazor.net" target="_blank">Documentation and demos</a>
+    </div>
+    <div class="link2">
+    <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor" target="_blank">About Blazor</a>
+    </div>
     </FluentFooter> *@
 </FluentLayout>
