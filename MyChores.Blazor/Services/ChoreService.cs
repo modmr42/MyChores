@@ -63,7 +63,7 @@ namespace MyChores.Blazor.Services
 
             return guid;
         }
-        public async Task Delete(string guid)
+        public async Task DeleteAsync(string guid)
         {
             var result = await _client.DeleteAsync($"{choresEndpoint}/{guid}");
             string jsonResponse = await result.Content.ReadAsStringAsync();

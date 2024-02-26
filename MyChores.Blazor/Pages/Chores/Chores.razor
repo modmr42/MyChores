@@ -113,7 +113,7 @@
                             </div>
 
                             <div class="col-1 align-self-center">
-                                <FluentButton>
+                                <FluentButton OnClick="() => DeleteChore(chore.Id)">
                                     <FluentIcon Value="@(new Icons.Regular.Size16.Delete())" Color="Color.Error" />
                                 </FluentButton>
                             </div>
@@ -162,8 +162,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        chores = await ChoreService.GetAllAsync();
-        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(CurrentSelectedDate.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
+        await RefreshAndSortChores();
     }
 
     private void HandleCalendarValue(DateTime? selectedValue)
@@ -183,13 +182,25 @@
         newChore.ChoreTaker = "Me";
         newChore.DateTime = CombineDateTime(CurrentSelectedDate.Value, newChoreTime.Value);
         await ChoreService.CreateAsync(newChore);
-        chores = await ChoreService.GetAllAsync();
-        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(CurrentSelectedDate.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
+
+        await RefreshAndSortChores();
 
         newChore = new CreateChoreCommand();
 
         showNewChore = false;
 
+    }
+
+    private async Task DeleteChore(Guid id)
+    {
+        await ChoreService.DeleteAsync(id.ToString());
+        await RefreshAndSortChores();
+    }
+
+    private async Task RefreshAndSortChores()
+    {
+        chores = await ChoreService.GetAllAsync();
+        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(CurrentSelectedDate.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
     }
 
     private bool DisabledDate(DateTime date)

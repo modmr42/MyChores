@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-8">
             <FluentLabel Typo="Typography.H1"> My Chores </FluentLabel>
-            <FluentLabel Typo="Typography.H3"> 15:00 </FluentLabel>
+            <FluentLabel Typo="Typography.H3"> @chore.DateTime.ToString("D")</FluentLabel>
                 <br />
                 <hr />
                 <br />
@@ -35,11 +35,16 @@
                                     </FluentLabel>
                                 </div>
                                 <div class="col-10">
-                                    <FluentLabel Typo="Typography.Header"> @chore.Name </FluentLabel>
-                                    <FluentLabel Typo="Typography.Subject"> @chore.Description </FluentLabel>
-                                    <FluentLabel Typo="Typography.Subject"> @chore.ChoreOwner </FluentLabel>
-                                    <FluentLabel Typo="Typography.Subject"> @chore.ChoreTaker </FluentLabel>
-                                    <FluentLabel Typo="Typography.Subject"> @chore.LastModifiedDate </FluentLabel>
+                                    <FluentLabel Weight="FontWeight.Bold" Typo="Typography.PaneHeader"> @chore.Name </FluentLabel>
+                                    <FluentLabel Typo="Typography.Header"> @chore.Description </FluentLabel>
+                                    <br />
+
+                                    <FluentLabel Typo="Typography.Subject">Created by: @chore.ChoreOwner </FluentLabel>
+                                    <FluentLabel Typo="Typography.Subject">Assigned to: @chore.ChoreTaker </FluentLabel>
+                                    <br/>
+
+                                    <FluentLabel Weight="FontWeight.Bold" Typo="Typography.Body">Created at: @chore.CreatedDate </FluentLabel>
+                                    <FluentLabel Typo="Typography.Body">Last edited: @chore.LastModifiedDate </FluentLabel>
                                     </div>
                                     <div class="col-1 align-self-center">
                                         <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
