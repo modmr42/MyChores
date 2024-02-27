@@ -3,10 +3,11 @@
 
 
 @using Microsoft.AspNetCore.Authorization
+@using MyChores.Application.Features.Chores.Commands
 @using MyChores.Application.Features.Chores.Dtos
 @using System.Diagnostics
 @using MyChores.Blazor.Services
-
+@inject IJSRuntime JSRuntime
 
 
 @inject ChoreService ChoreService
@@ -20,6 +21,9 @@
                 <br />
                 <hr />
                 <br />
+
+            @if (!editChore)
+            {
                 <div class="row">
                     <div class="col-11">
                         <div class="rounded-top" style="background-color:var(--accent-fill-rest); height:10px;"></div>
@@ -31,34 +35,86 @@
                                     <FluentIcon Value="@(new Icons.Regular.Size20.Clock())" Color="Color.Accent" />
 
                                     <FluentLabel Typo="Typography.H6">
-                                        15:00
+                                        @chore.DateTime.ToShortTimeString()
                                     </FluentLabel>
                                 </div>
                                 <div class="col-10">
                                     <FluentLabel Weight="FontWeight.Bold" Typo="Typography.PaneHeader"> @chore.Name </FluentLabel>
-                                    <FluentLabel Typo="Typography.Header"> @chore.Description </FluentLabel>
-                                    <br />
+                                        <FluentLabel Typo="Typography.Header"> @chore.Description </FluentLabel>
+                                        <br />
 
-                                    <FluentLabel Typo="Typography.Subject">Created by: @chore.ChoreOwner </FluentLabel>
-                                    <FluentLabel Typo="Typography.Subject">Assigned to: @chore.ChoreTaker </FluentLabel>
-                                    <br/>
+@*                                         <FluentLabel Typo="Typography.Subject">Created by: @chore.ChoreOwner </FluentLabel>
+                                        <FluentLabel Typo="Typography.Subject">Assigned to: @chore.ChoreTaker </FluentLabel> *@
+                                        <br />
 
-                                    <FluentLabel Weight="FontWeight.Bold" Typo="Typography.Body">Created at: @chore.CreatedDate </FluentLabel>
-                                    <FluentLabel Typo="Typography.Body">Last edited: @chore.LastModifiedDate </FluentLabel>
+                                        <FluentLabel Weight="FontWeight.Bold" Typo="Typography.Body">Created at: @chore.CreatedDate </FluentLabel>
+                                        <FluentLabel Typo="Typography.Body">Last edited: @chore.LastModifiedDate </FluentLabel>
                                     </div>
                                     <div class="col-1 align-self-center">
                                         <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
                                     </div>
+                                </div>
+                            </FluentCard>
+                        </div>
+                        <div class="col-1 align-self-center">
+                            <FluentButton Class="mb-3" OnClick="GoBack">
+                                <FluentIcon Value="@(new Icons.Regular.Size16.ArrowLeft())" Color="Color.Info" />
+                            </FluentButton>
+                            <FluentButton OnClick="(()=> editChore = true)">
+                                <FluentIcon Value="@(new Icons.Regular.Size16.Pen())" Color="Color.Accent" />
+                            </FluentButton>
+                        </div>
+                    </div>
+
+            }
+            @if (editChore)
+            {
+                <EditForm Model="chore" OnSubmit="EditChore">
+                    <div class="row mb-5">
+                        <div class="col-11">
+                            <div class="rounded-top" style="background-color:var(--accent-fill-rest); height:10px;">
                             </div>
-                        </FluentCard>
+                            <FluentCard>
+                                <div class="row">
+                                    <div class="col-2">
+                                        <FluentTimePicker @bind-Value="newChoreTime"  Label="Time:" />
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <FluentTextField Class="w-100" @bind-Value=chore.Name Label="Name"></FluentTextField>
+                                            </div>
+                                            <div class="col-6">
+                                                @*<FluentSelect Class="w-100" Items="recourseOptions"
+                                            Label="Select a recourse"
+                                            OptionValue="@(r => ((int)r.Value).ToString())"
+                                            OptionText="@(r => r.Value.ToString())"
+                                            @bind-Value="newChore.Recourse" /> *@
+                                            </div>
+                                        </div>
+                                        <FluentTextArea Class="w-100" @bind-Value=chore.Description Label="Description"></FluentTextArea>
+                                    </div>
+                                    <div class="col-1 align-self-center">
+                                        <FluentCheckbox Appearance="Appearance.Outline"></FluentCheckbox>
+                                    </div>
+                                </div>
+                            </FluentCard>
+                        </div>
+
+                        <div class="col-1 align-self-center">
+                            <FluentButton Class="mb-3" OnClick="(()=> editChore = false)">
+                                <FluentIcon Value="@(new Icons.Regular.Size16.ArrowLeft())" Color="Color.Info" />
+                            </FluentButton>
+                            <FluentButton Type="ButtonType.Submit">
+                                <FluentIcon Value="@(new Icons.Regular.Size16.Save())" Color="Color.Success" />
+                            </FluentButton>
+                        </div>
                     </div>
-                    <div class="col-1 align-self-center">
-                        <FluentButton OnClick="(()=> editChore = true)">
-                            <FluentIcon Value="@(new Icons.Regular.Size16.Pen())" Color="Color.Accent" />
-                        </FluentButton>
-                    </div>
-                </div>
-            </div>
+                </EditForm>
+
+
+            }
+        </div>
             <br />
 
 
@@ -80,10 +136,39 @@
     private bool editChore = false;
 
     private ChoreDto? chore = new ChoreDto();
+    private UpdateChoreCommand? updatedChore = new UpdateChoreCommand();
+    private DateTime? newChoreTime;
 
     protected override async Task OnInitializedAsync()
     {
         chore = await ChoreService.GetAsync(Guid);
+        newChoreTime = chore.DateTime;
     }
 
+    private async Task EditChore()
+    {
+        updatedChore.Id = chore.Id;
+        updatedChore.ChoreOwner = chore.ChoreOwner;
+        updatedChore.ChoreTaker = chore.ChoreTaker;
+        updatedChore.Completed = chore.Completed;
+        updatedChore.Name = chore.Name;
+        updatedChore.Description = chore.Description;
+        updatedChore.DateTime = CombineDateTime(chore.DateTime, newChoreTime.Value);
+        await ChoreService.UpdateAsync(updatedChore);
+
+        chore = await ChoreService.GetAsync(Guid);
+        newChoreTime = chore.DateTime;
+        editChore = false;
+    }
+
+    static DateTime CombineDateTime(DateTime datePart, DateTime timePart)
+    {
+        // Combine the date part with the time part
+        return new DateTime(datePart.Year, datePart.Month, datePart.Day,
+                            timePart.Hour, timePart.Minute, timePart.Second);
+    }
+    private async Task GoBack()
+    {
+        await JSRuntime.InvokeVoidAsync("history.back");
+    }
 }

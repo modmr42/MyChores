@@ -57,7 +57,7 @@ namespace MyChores.Blazor.Services
         }
         public async Task<Guid?> UpdateAsync(UpdateChoreCommand chore)
         {
-            var result = await _client.GetAsync($"{choresEndpoint}");
+            var result = await _client.PutAsJsonAsync<UpdateChoreCommand>($"{choresEndpoint}/{chore.Id}", chore);
             string jsonResponse = await result.Content.ReadAsStringAsync();
             var guid = JsonConvert.DeserializeObject<Guid?>(jsonResponse);
 
