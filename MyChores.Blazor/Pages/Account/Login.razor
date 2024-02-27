@@ -16,15 +16,20 @@
 
 <div class="container ">
     <div class="row justify-content-center">
-        <div class="col-6">
-            <h3>Login</h3>
-            <EditForm Model="user" OnSubmit="HandleLogin">
-                <label for="email">Email</label>
-                <InputText id="email" @bind-Value="user.Email" />
-                <label for="password">Password</label>
-                <InputText id="password" @bind-Value="user.Password" type="password" />
-                <button type="submit" class="btn btn-primary">Do it!</button>
-            </EditForm>
+        <div class="col-4 align-self-center mt-5">
+            <FluentCard >
+                <div class="text-center ">
+                    <FluentIcon Value="@(new Icons.Regular.Size48.Person())" Color="Color.Accent" />
+                </div>
+                <hr/>
+                <EditForm Model="user" OnSubmit="HandleLogin">
+                    <FluentLabel Class="mt-3">Email</FluentLabel>
+                    <FluentTextField id="email" Class="w-100 mt-2" @bind-Value="user.Email" />
+                    <FluentLabel Class="mt-3">Password</FluentLabel>
+                    <FluentTextField id="password" Class="w-100  mt-2" @bind-Value="user.Password" type="password" />
+                    <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" Class="w-100 mt-4">Login</FluentButton>
+                </EditForm>
+            </FluentCard>
         </div>
     </div>
 </div>
