@@ -7,9 +7,8 @@
 @using MyChores.Application.Features.Chores.Dtos
 @using System.Diagnostics
 @using MyChores.Blazor.Services
-@inject IJSRuntime JSRuntime
 
-
+@inject NavigationManager navigation
 @inject ChoreService ChoreService
 
 
@@ -169,6 +168,7 @@
     }
     private async Task GoBack()
     {
-        await JSRuntime.InvokeVoidAsync("history.back");
+        string redirectLink = $"/chores/{chore.DateTime.ToString("yyyy-MM-dd")}";
+        navigation.NavigateTo(redirectLink);
     }
 }

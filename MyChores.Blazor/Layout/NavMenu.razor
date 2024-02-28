@@ -5,13 +5,14 @@
     <nav class="sitenav" aria-labelledby="main-menu" onclick="document.getElementById('navmenu-toggle').click();">
         <FluentNavMenu Id="main-menu" Width="250" Collapsible="true" Title="Navigation menu" @bind-Expanded="expanded" >
              <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent">Home</FluentNavLink>
-            <FluentNavLink Href="chores" Icon="@(new Icons.Regular.Size20.Person())" IconColor="Color.Accent">Account</FluentNavLink>
-            <FluentNavLink Href="chores" Icon="@(new Icons.Regular.Size20.Check())" IconColor="Color.Accent">Chores</FluentNavLink>
+            <FluentNavLink Href="@choresRoute" Icon="@(new Icons.Regular.Size20.Person())" IconColor="Color.Accent">Account</FluentNavLink>
+            <FluentNavLink Href="@choresRoute" Icon="@(new Icons.Regular.Size20.Check())" IconColor="Color.Accent">Chores</FluentNavLink>
         </FluentNavMenu>
     </nav>
 </div>
 @code {
     private bool expanded = true;
 
+    private string choresRoute = $"/chores";
 
 }

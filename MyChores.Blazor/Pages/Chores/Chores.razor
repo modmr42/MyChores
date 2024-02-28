@@ -1,4 +1,4 @@
-﻿@page "/chores"
+﻿@page "/chores/{SelectedDateTime:datetime?}"
 @attribute [Authorize]
 
 
@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-8">
             <FluentLabel Typo="Typography.H1"> My Chores </FluentLabel>
-            <FluentLabel Typo="Typography.H3"> @CurrentSelectedDate?.ToString("D") </FluentLabel>
+            <FluentLabel Typo="Typography.H3"> @SelectedDateTime?.ToString("D") </FluentLabel>
                 <br />
                 <hr />
                 <div class="row justify-content-end mb-3">
@@ -150,7 +150,9 @@
 
 @code
 {
-    private DateTime? CurrentSelectedDate = DateTime.Now;
+    [Parameter]
+    public DateTime? SelectedDateTime { get; set; }
+
     private List<ChoreDto>? chores;
     private List<ChoreDto>? choresForSelectedDate;
 
@@ -162,14 +164,15 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if(SelectedDateTime == DateTime.MinValue || SelectedDateTime == null){ SelectedDateTime = DateTime.Now; }
         await RefreshAndSortChores();
     }
 
     private void HandleCalendarValue(DateTime? selectedValue)
     {
-        CurrentSelectedDate = selectedValue;
+        SelectedDateTime = selectedValue;
 
-        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(CurrentSelectedDate.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
+        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(SelectedDateTime.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
     }
     private void ShowNewChore()
     {
@@ -180,7 +183,7 @@
     {
         newChore.ChoreOwner = "Me";
         newChore.ChoreTaker = "Me";
-        newChore.DateTime = CombineDateTime(CurrentSelectedDate.Value, newChoreTime.Value);
+        newChore.DateTime = CombineDateTime(SelectedDateTime.Value, newChoreTime.Value);
         await ChoreService.CreateAsync(newChore);
 
         await RefreshAndSortChores();
@@ -200,7 +203,7 @@
     private async Task RefreshAndSortChores()
     {
         chores = await ChoreService.GetAllAsync();
-        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(CurrentSelectedDate.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
+        choresForSelectedDate = chores.Where(x => x.DateTime.Day.Equals(SelectedDateTime.ToDateTime().Day)).OrderBy(x => x.DateTime).ToList();
     }
 
     private bool DisabledDate(DateTime date)

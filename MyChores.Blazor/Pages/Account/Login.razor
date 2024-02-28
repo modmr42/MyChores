@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using MyChores.Application.Features.Auth.Queries
 @using MyChores.Blazor.Services
+@using System.Diagnostics
 
 @page "/account/login"
 
@@ -58,7 +59,7 @@
 
         if (userState.User.Identity.IsAuthenticated)
         {
-            navigation.NavigateTo("/Chores");
+            navigation.NavigateTo("/chores");
         }
 
     }
