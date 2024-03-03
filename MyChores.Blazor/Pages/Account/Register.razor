@@ -1,9 +1,70 @@
-﻿@inject NavigationManager NavigationManager
-@inject HttpClient Http
-@page "/account/register"
+﻿@page "/account/register"
+
+@using Blazored.LocalStorage
+@using Microsoft.AspNetCore.Components.Authorization
+@using MyChores.Application.Features.Auth.Commands
+@using MyChores.Application.Features.Auth.Queries
+@using MyChores.Blazor.Services
+@using System.Diagnostics
 
 
+@inject NavigationManager navigation
+@inject AuthenticationStateProvider authStateProvider
+@inject AuthService authService
 
-@code {
+@inject ILocalStorageService LocalStorage
 
+<div class="container ">
+    <div class="row justify-content-center">
+        <div class="col-4 align-self-center mt-5">
+            <FluentCard>
+                <div class="text-center ">
+                    <FluentIcon Value="@(new Icons.Regular.Size48.Person())" Color="Color.Accent" />
+                    <br/>
+                    <FluentLabel Typo="Typography.H6">Register</FluentLabel>
+                </div>
+                <hr />
+                <EditForm Model="user" OnSubmit="HandleRegister">
+                    <FluentLabel Class="mt-3">Username</FluentLabel>
+                    <FluentTextField id="email" Class="w-100 mt-2" @bind-Value="user.UserName" />
+                    <FluentLabel Class="mt-3">Email</FluentLabel>
+                    <FluentTextField id="email" Class="w-100 mt-2" @bind-Value="user.Email" />
+                    <FluentLabel Class="mt-3">Password</FluentLabel>
+                    <FluentTextField id="password" Class="w-100  mt-2" @bind-Value="user.Password" type="password" />
+                    <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" Class="w-100 mt-4">
+                        Register
+                        @if (showSpinner)
+                        {
+                            <FluentProgressRing></FluentProgressRing>
+                        }
+                    </FluentButton>
+                </EditForm>
+            </FluentCard>
+        </div>
+    </div>
+</div>
+
+
+@code
+{
+    private CreateUserCommand? user;
+    private bool showSpinner = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = new CreateUserCommand();
+    }
+
+    public async Task HandleRegister()
+    {
+        showSpinner = true;
+        var response = await authService.CreateUserAsync(user);
+
+        if (response == null)
+            throw new Exception("register failed");
+
+        navigation.NavigateTo("/account/login");
+
+    }
 }
+

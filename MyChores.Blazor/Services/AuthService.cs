@@ -26,7 +26,6 @@ namespace MyChores.Blazor.Services
             if (!result.IsSuccessStatusCode)
                 return null;
 
-
             string jsonResponse = await result.Content.ReadAsStringAsync();
             var guid = JsonConvert.DeserializeObject<Guid?>(jsonResponse);
 
