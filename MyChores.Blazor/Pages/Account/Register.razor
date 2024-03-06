@@ -31,12 +31,8 @@
                     <FluentTextField id="email" Class="w-100 mt-2" @bind-Value="user.Email" />
                     <FluentLabel Class="mt-3">Password</FluentLabel>
                     <FluentTextField id="password" Class="w-100  mt-2" @bind-Value="user.Password" type="password" />
-                    <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" Class="w-100 mt-4">
+                    <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" Class="w-100 mt-4" Loading=@showSpinner>
                         Register
-                        @if (showSpinner)
-                        {
-                            <FluentProgressRing></FluentProgressRing>
-                        }
                     </FluentButton>
                 </EditForm>
             </FluentCard>

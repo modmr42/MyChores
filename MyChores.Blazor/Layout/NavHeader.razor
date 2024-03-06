@@ -9,10 +9,19 @@
 
 <FluentHeader>
     <a class="text-decoration-none text-white ms-md-3" href="/">MyChores</a>
+    <FluentDesignTheme @bind-Mode="@Mode" @bind-OfficeColor="@OfficeColor" StorageName="theme" />
 
     <FluentGrid Justify="JustifyContent.FlexEnd">
         <FluentGridItem Class="me-5">
+                <div class="col-1 align-self-end">
+                    <FluentButton OnClick="ChangeTheme" BackgroundColor="Color.Accent">
+                        <FluentIcon Value="@(new Icons.Regular.Size16.WeatherSunny())" Color="Color.Accent"/>
+                    </FluentButton>
+                </div>
+        </FluentGridItem>
+        <FluentGridItem Class="me-5">
             <AuthorizeView>
+
                 <div class="col-1 align-self-end">
                     <FluentButton OnClick="LogOut" Appearance="Appearance.Lightweight">Logout</FluentButton>
                 </div>
@@ -22,6 +31,21 @@
 </FluentHeader>
 
 @code {
+
+    public DesignThemeModes Mode { get; set; }
+
+    public OfficeColor? OfficeColor { get; set; }
+
+    private void ChangeTheme()
+    {
+        if(Mode == DesignThemeModes.Light)
+        {
+            Mode = DesignThemeModes.Dark;
+            return;
+        }
+        Mode = DesignThemeModes.Light;
+    }
+
     private async Task LogOut()
     {
         await LocalStorage.RemoveItemAsync("token");

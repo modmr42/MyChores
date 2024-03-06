@@ -28,7 +28,7 @@
                     <FluentTextField id="email" Class="w-100 mt-2" @bind-Value="user.Email" />
                     <FluentLabel Class="mt-3">Password</FluentLabel>
                     <FluentTextField id="password" Class="w-100  mt-2" @bind-Value="user.Password" type="password" />
-                    <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" Class="w-100 mt-4">Login</FluentButton>
+                    <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent" Class="w-100 mt-4" Loading=@showSpinner>Login</FluentButton>
                 </EditForm>
             </FluentCard>
         </div>
@@ -39,6 +39,8 @@
 @code
 {
     private LoginUserQuery? user;
+    private bool showSpinner = false;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -47,7 +49,7 @@
 
     public async Task HandleLogin()
     {
-
+        showSpinner = true;
         var response = await authService.LoginUserAsync(user);
 
         if (response == null)
