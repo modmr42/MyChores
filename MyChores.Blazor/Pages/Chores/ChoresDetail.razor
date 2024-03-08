@@ -37,14 +37,18 @@
                                         @chore.DateTime.ToShortTimeString()
                                     </FluentLabel>
                                 </div>
-                                <div class="col-10">
+
+                                <div class="col-1 align-self-center text-center">
+                                    <FluentIcon Value="@(new Icons.Regular.Size20.ArrowRepeatAll())" Color="Color.Accent" />
+                                    <FluentLabel Typo="Typography.H6">
+                                        @chore.Recourse
+                                    </FluentLabel>
+                                </div>
+                                <div class="col-9">
                                     <FluentLabel Weight="FontWeight.Bold" Typo="Typography.PaneHeader"> @chore.Name </FluentLabel>
                                         <FluentLabel Typo="Typography.Header"> @chore.Description </FluentLabel>
                                         <br />
 
-@*                                         <FluentLabel Typo="Typography.Subject">Created by: @chore.ChoreOwner </FluentLabel>
-                                        <FluentLabel Typo="Typography.Subject">Assigned to: @chore.ChoreTaker </FluentLabel> *@
-                                        <br />
 
                                         <FluentLabel Weight="FontWeight.Bold" Typo="Typography.Body">Created at: @chore.CreatedDate </FluentLabel>
                                         <FluentLabel Typo="Typography.Body">Last edited: @chore.LastModifiedDate </FluentLabel>

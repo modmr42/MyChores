@@ -12,6 +12,8 @@
 
 @inject NavigationManager NavigationManager
 @inject ChoreService ChoreService
+@inject RecourseService RecourseService
+
 
 
 
@@ -49,11 +51,11 @@
                                                 <FluentTextField Class="w-100" @bind-Value=newChore.Name Label="Name"></FluentTextField>
                                             </div>
                                             <div class="col-6">
-                                            @*<FluentSelect Class="w-100" Items="recourseOptions"
+                                                <FluentSelect Class="w-100" Items="recourseOptions"
                                                               Label="Select a recourse"
-                                                              OptionValue="@(r => ((int)r.Value).ToString())"
-                                                              OptionText="@(r => r.Value.ToString())"
-                                                              @bind-Value="newChore.Recourse" /> *@
+                                                              OptionValue="@(r => r.Value)"
+                                                              OptionText="@(r => r.Text)"
+                                                              @bind-Value="newChoreRecourse" />
                                             </div>
                                         </div>
                                         <FluentTextArea Class="w-100" @bind-Value=newChore.Description Label="Description"></FluentTextArea>
@@ -100,7 +102,13 @@
                                                 @chore.DateTime.ToShortTimeString()
                                             </FluentLabel>
                                         </div>
-                                        <div class="col-10">
+                                        <div class="col-2 align-self-center text-center">
+                                            <FluentIcon Value="@(new Icons.Regular.Size20.ArrowRepeatAll())" Color="Color.Accent" />
+                                            <FluentLabel Typo="Typography.H6">
+                                                @chore.Recourse
+                                            </FluentLabel>
+                                        </div>
+                                        <div class="col-8">
                                             <FluentLabel Typo="Typography.Header"> @chore.Name </FluentLabel>
                                                 <FluentLabel Typo="Typography.Subject"> @chore.Description </FluentLabel>
                                             </div>
@@ -159,12 +167,16 @@
     private CreateChoreCommand newChore = new CreateChoreCommand();
     private bool showNewChore;
     private DateTime? newChoreTime;
+    private string newChoreRecourse;
+
+    private IEnumerable<Option<string>> recourseOptions;
 
     // private List<Option<Recourse?>> recourseOptions = Enum.GetValues(typeof(Recourse)).Cast<Recourse?>().Select(x => new Option<Recourse?> { Value = x.Value }).ToList();
 
     protected override async Task OnInitializedAsync()
     {
-        if(SelectedDateTime == DateTime.MinValue || SelectedDateTime == null){ SelectedDateTime = DateTime.Now; }
+        recourseOptions = RecourseService.RecourseOptions;
+        if (SelectedDateTime == DateTime.MinValue || SelectedDateTime == null) { SelectedDateTime = DateTime.Now; }
         await RefreshAndSortChores();
     }
 
@@ -183,6 +195,7 @@
     {
         newChore.ChoreOwner = "Me";
         newChore.ChoreTaker = "Me";
+        newChore.Recourse = RecourseService.GetEnumByIndex(newChoreRecourse);
         newChore.DateTime = CombineDateTime(SelectedDateTime.Value, newChoreTime.Value);
         await ChoreService.CreateAsync(newChore);
 

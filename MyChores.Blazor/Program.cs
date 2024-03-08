@@ -19,6 +19,8 @@ namespace MyChores.Blazor
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
             builder.Services.AddScoped<ChoreService>();
             builder.Services.AddScoped<AuthService>();
+            builder.Services.AddScoped<RecourseService>();
+
 
             builder.Services.AddHttpClient();
             builder.Services.AddAuthorizationCore();
